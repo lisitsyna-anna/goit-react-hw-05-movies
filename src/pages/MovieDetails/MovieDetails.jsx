@@ -41,7 +41,7 @@ const MovieDetails = () => {
   const { title, posterPath, releaseDate, genres, overview, voteAverage } =
     movie;
 
-  console.log('error', error);
+  // console.log('error', error);
   return (
     <>
       {error && <RequestError />}
