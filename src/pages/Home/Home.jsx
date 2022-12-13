@@ -28,6 +28,9 @@ const Home = () => {
       });
   }, []);
 
+  if (!trendingMovies) {
+    return;
+  }
   return (
     <main>
       <Title>Trending today</Title>
@@ -48,9 +51,11 @@ const Home = () => {
                   width={250}
                 />
                 <Container as="div" p={10}>
-                  <MovieName>{title}</MovieName>
+                  <MovieName>
+                    {title ? title : 'There is no title here yet. '}
+                  </MovieName>
                   <RealeseDate>
-                    {new Date(releaseDate).getFullYear()}
+                    {releaseDate ? new Date(releaseDate).getFullYear() : '---'}
                   </RealeseDate>
                 </Container>
               </Link>

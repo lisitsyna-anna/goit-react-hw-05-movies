@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
-import { RotatingLines } from 'react-loader-spinner';
+import FadeLoader from 'react-spinners/ClipLoader';
 
 import Container from 'components/Container';
 import { Header, NavList, StyledNavLink } from './SharedLayout.styled';
@@ -24,12 +24,16 @@ const SharedLayout = () => {
       </Header>
       <Suspense
         fallback={
-          <RotatingLines
-            strokeColor="grey"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="96"
-            visible={true}
+          <FadeLoader
+            color="#2196F3"
+            cssOverride={{
+              display: 'block',
+              margin: '0 auto',
+            }}
+            height={50}
+            loading
+            margin={0}
+            width={5}
           />
         }
       >

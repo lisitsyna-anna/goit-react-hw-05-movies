@@ -27,7 +27,7 @@ const Movies = () => {
 
   useEffect(() => {
     if (!searchQuery) {
-      toast('Enter a search term');
+      // toast('Enter a search term');
       setSearchMovies([]);
       return;
     }

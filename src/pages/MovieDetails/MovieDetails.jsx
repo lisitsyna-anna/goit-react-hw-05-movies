@@ -1,6 +1,6 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useLocation, useParams, Outlet } from 'react-router-dom';
-import { RotatingLines } from 'react-loader-spinner';
+import FadeLoader from 'react-spinners/ClipLoader';
 import { getMovieById, IMAGE_URL } from 'services/moviesAPI';
 
 import RequestError from 'components/RequestError';
@@ -99,12 +99,16 @@ const MovieDetails = () => {
         </LinkList>
         <Suspense
           fallback={
-            <RotatingLines
-              strokeColor="grey"
-              strokeWidth="5"
-              animationDuration="0.75"
-              width="96"
-              visible={true}
+            <FadeLoader
+              color="#2196F3"
+              cssOverride={{
+                display: 'block',
+                margin: '0 auto',
+              }}
+              height={50}
+              loading
+              margin={0}
+              width={5}
             />
           }
         >
