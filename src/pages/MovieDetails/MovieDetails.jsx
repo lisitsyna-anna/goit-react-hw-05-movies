@@ -27,94 +27,95 @@ const MovieDetails = () => {
 
   useEffect(() => {
     getMovieById(Number(movieId))
-      .then(setMovie)
+      .then(movie => {
+        setMovie(movie);
+        setError(null);
+      })
       .catch(error => {
         console.log(error.message);
         setError(error.message);
+        setMovie(null);
       });
   }, [movieId]);
 
-  if (!movie) {
-    return null;
-  }
-
-  const { title, posterPath, releaseDate, genres, overview, voteAverage } =
-    movie;
-
-  // console.log('error', error);
   return (
     <>
-      {error && <RequestError />}
       <BackLink to={backLinkHref}>Go back</BackLink>
-      <MainSection>
-        <Title>Movie details</Title>
-        <img
-          src={
-            posterPath
-              ? IMAGE_URL + posterPath
-              : 'https://ik.imagekit.io/tc8jxffbcvf/default-movie-portrait_EmJUj9Tda5wa.jpg?tr=fo-auto,di-'
-          }
-          alt={title}
-          width={250}
-        />
-        <Container as="div" display="flex" flexDirection="column">
-          <MovieName>
-            {title ? title : 'There is no title yet'} (
-            {new Date(releaseDate).getFullYear()})
-          </MovieName>
-          <InfoList>
-            <li>
-              <p>
-                <b>User score: </b>
-                {voteAverage.toFixed(1)}
-              </p>
-            </li>
-            <li>
-              <p>
-                <b>Overview:</b> {overview}
-              </p>
-            </li>
-            <li>
-              <p>
-                <b>Genres:</b> {genres.map(genre => genre.name).join(', ')}
-              </p>
-            </li>
-          </InfoList>
-        </Container>
-      </MainSection>
-
-      <AdditionalSection>
-        <AdditionalTitle>Additional information</AdditionalTitle>
-        <LinkList>
-          <li>
-            <StyledNavLink to="cast" state={{ from: backLinkHref }}>
-              Cast
-            </StyledNavLink>
-          </li>
-          <li>
-            <StyledNavLink to="reviews" state={{ from: backLinkHref }}>
-              Reviews
-            </StyledNavLink>
-          </li>
-        </LinkList>
-        <Suspense
-          fallback={
-            <FadeLoader
-              color="#2196F3"
-              cssOverride={{
-                display: 'block',
-                margin: '0 auto',
-              }}
-              height={50}
-              loading
-              margin={0}
-              width={5}
+      {!movie && error && <RequestError />}
+      {movie && (
+        <>
+          <MainSection>
+            <Title>Movie details</Title>
+            <img
+              src={
+                movie.posterPath
+                  ? IMAGE_URL + movie.posterPath
+                  : 'https://ik.imagekit.io/tc8jxffbcvf/default-movie-portrait_EmJUj9Tda5wa.jpg?tr=fo-auto,di-'
+              }
+              alt={movie.title}
+              width={250}
             />
-          }
-        >
-          <Outlet />
-        </Suspense>
-      </AdditionalSection>
+            <Container as="div" display="flex" flexDirection="column">
+              <MovieName>
+                {movie.title ? movie.title : 'There is no title yet'} (
+                {new Date(movie.releaseDate).getFullYear()})
+              </MovieName>
+              <InfoList>
+                <li>
+                  <p>
+                    <b>User score: </b>
+                    {movie.voteAverage.toFixed(1)}
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    <b>Overview:</b> {movie.overview}
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    <b>Genres:</b>{' '}
+                    {movie.genres.map(genre => genre.name).join(', ')}
+                  </p>
+                </li>
+              </InfoList>
+            </Container>
+          </MainSection>
+
+          <AdditionalSection>
+            <AdditionalTitle>Additional information</AdditionalTitle>
+            <LinkList>
+              <li>
+                <StyledNavLink to="cast" state={{ from: backLinkHref }}>
+                  Cast
+                </StyledNavLink>
+              </li>
+              <li>
+                <StyledNavLink to="reviews" state={{ from: backLinkHref }}>
+                  Reviews
+                </StyledNavLink>
+              </li>
+            </LinkList>
+            <Suspense
+              fallback={
+                <FadeLoader
+                  color="#2196F3"
+                  cssOverride={{
+                    display: 'block',
+                    margin: '0 auto',
+                  }}
+                  height={50}
+                  loading
+                  margin={0}
+                  width={5}
+                />
+              }
+            >
+              <Outlet />
+            </Suspense>
+          </AdditionalSection>
+        </>
+      )}
     </>
   );
 };

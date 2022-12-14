@@ -8,52 +8,54 @@ import { ActorsList, ActorItem, ActorImg } from './Cast.styled';
 
 const Cast = () => {
   const { movieId } = useParams();
-  const [actors, setActors] = useState(null);
+  const [actors, setActors] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     getCastsById(Number(movieId))
-      .then(setActors)
+      .then(actors => {
+        setActors(actors);
+        setError(null);
+      })
       .catch(error => {
         console.log(error.message);
         setError(error);
+        setActors([]);
       });
   }, [movieId]);
-
-  if (!actors) {
-    return null;
-  }
 
   return (
     <>
       {error && <RequestError />}
-      <ActorsList>
-        {actors.map(({ id, name, profilePath, character }) => (
-          <ActorItem key={id}>
-            <ActorImg
-              src={
-                profilePath
-                  ? IMAGE_URL + profilePath
-                  : 'https://ik.imagekit.io/tc8jxffbcvf/default-movie-portrait_EmJUj9Tda5wa.jpg?tr=fo-auto,di-'
-              }
-              alt={name}
-              width={200}
-            />
-            <Container
-              as="div"
-              p={10}
-              display="flex"
-              flexDirection="column"
-              justifyContent="space-between"
-            >
-              <b>{name}</b>
-              <p>
-                <b>Character:</b> {character}
-              </p>
-            </Container>
-          </ActorItem>
-        ))}
-      </ActorsList>
+      {actors?.length > 0 && (
+        <ActorsList>
+          {actors.map(({ id, name, profilePath, character }) => (
+            <ActorItem key={id}>
+              <ActorImg
+                src={
+                  profilePath
+                    ? IMAGE_URL + profilePath
+                    : 'https://ik.imagekit.io/tc8jxffbcvf/default-movie-portrait_EmJUj9Tda5wa.jpg?tr=fo-auto,di-'
+                }
+                alt={name}
+                width={200}
+              />
+              <Container
+                as="div"
+                p={10}
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+              >
+                <b>{name}</b>
+                <p>
+                  <b>Character:</b> {character}
+                </p>
+              </Container>
+            </ActorItem>
+          ))}
+        </ActorsList>
+      )}
     </>
   );
 };

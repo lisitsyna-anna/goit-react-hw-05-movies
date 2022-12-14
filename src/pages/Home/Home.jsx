@@ -21,21 +21,22 @@ const Home = () => {
 
   useEffect(() => {
     getTrendingMovies()
-      .then(setTrendingMovies)
+      .then(trendingMovies => {
+        setTrendingMovies(trendingMovies);
+        setError(null);
+      })
       .catch(error => {
         console.log(error.message);
         setError(error.message);
+        setTrendingMovies([]);
       });
   }, []);
 
-  if (!trendingMovies) {
-    return;
-  }
   return (
     <main>
       <Title>Trending today</Title>
       {error && <RequestError />}
-      {trendingMovies.length > 0 && (
+      {trendingMovies?.length > 0 && (
         <MoviesList>
           {trendingMovies.map(({ id, title, posterPath, releaseDate }) => (
             <MovieItem key={id}>

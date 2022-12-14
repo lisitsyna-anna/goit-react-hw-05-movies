@@ -43,9 +43,11 @@ const Movies = () => {
         if (movies.length === 0) {
           toast.error('There are no movies for this search');
         }
+        setError(null);
       })
       .catch(error => {
         console.log(error.message);
+        setSearchMovies([]);
         setError(error);
       });
   }, [searchQuery]);
@@ -56,11 +58,11 @@ const Movies = () => {
 
   return (
     <main>
-      {error && <RequestError />}
       <section>
         <SearchTitle>Search movies</SearchTitle>
         <SearchForm onSubmit={onSubmit} value={searchQuery} />
-        {searchMovies.length > 0 && (
+        {error && <RequestError />}
+        {searchMovies?.length > 0 && (
           <MoviesList>
             {searchMovies.map(({ id, title, posterPath, releaseDate }) => (
               <MovieItem key={id}>

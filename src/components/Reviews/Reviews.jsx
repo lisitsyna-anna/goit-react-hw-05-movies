@@ -12,21 +12,21 @@ const Reviews = () => {
 
   useEffect(() => {
     getMovieReviews(movieId)
-      .then(setReviews)
+      .then(reviews => {
+        setReviews(reviews);
+        setError(null);
+      })
       .catch(error => {
         console.log(error.message);
-        setError(error);
+        setError(error.message);
+        setReviews([]);
       });
   }, [movieId]);
-
-  if (!reviews) {
-    return null;
-  }
 
   return (
     <>
       {error && <RequestError />}
-      {reviews.length > 0 ? (
+      {reviews.length > 0 && !error && (
         <ReviewsList>
           {reviews.map(({ id, author, content }) => (
             <li key={id}>
@@ -35,7 +35,8 @@ const Reviews = () => {
             </li>
           ))}
         </ReviewsList>
-      ) : (
+      )}
+      {reviews.length === 0 && !error && (
         <p>We don't have any reviews for this movie</p>
       )}
     </>
