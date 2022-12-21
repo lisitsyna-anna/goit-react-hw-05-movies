@@ -27,6 +27,7 @@ const Cast = () => {
   return (
     <>
       {error && <RequestError />}
+
       {actors?.length > 0 && (
         <ActorsList>
           {actors.map(({ id, name, profilePath, character }) => (
@@ -56,6 +57,7 @@ const Cast = () => {
           ))}
         </ActorsList>
       )}
+      {actors.length === 0 && !error && <p>There is no information here yet</p>}
     </>
   );
 };

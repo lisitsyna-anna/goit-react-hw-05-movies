@@ -4,6 +4,7 @@ export const Form = styled.form`
   display: flex;
   gap: ${p => p.theme.space[5]}px;
   justify-content: center;
+  margin-bottom: ${p => p.theme.space[4]}px;
 `;
 
 export const Input = styled.input`

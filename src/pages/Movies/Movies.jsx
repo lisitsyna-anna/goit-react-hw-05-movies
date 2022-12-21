@@ -1,33 +1,24 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams, Link, useLocation } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
+import { getMovieByQuery } from 'services/moviesAPI';
 import SearchForm from 'components/SearchForm';
-import { getMovieByQuery, IMAGE_URL } from 'services/moviesAPI';
+import MoviesList from 'components/MoviesList';
 
-import {
-  SearchTitle,
-  MoviesList,
-  MovieItem,
-  MovieImg,
-  MovieName,
-  RealeseDate,
-} from './Movies.styled';
-import Container from 'components/Container';
+import { SearchTitle } from './Movies.styled';
+
 import RequestError from 'components/RequestError';
 
 const Movies = () => {
   const [searchMovies, setSearchMovies] = useState([]);
   const [error, setError] = useState(null);
-
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get('query') ?? '';
-
   const location = useLocation();
 
   useEffect(() => {
     if (!searchQuery) {
-      // toast('Enter a search term');
       setSearchMovies([]);
       return;
     }
@@ -63,30 +54,7 @@ const Movies = () => {
         <SearchForm onSubmit={onSubmit} value={searchQuery} />
         {error && <RequestError />}
         {searchMovies?.length > 0 && (
-          <MoviesList>
-            {searchMovies.map(({ id, title, posterPath, releaseDate }) => (
-              <MovieItem key={id}>
-                <Link to={`/movies/${id}`} state={{ from: location }}>
-                  <MovieImg
-                    src={
-                      posterPath
-                        ? IMAGE_URL + posterPath
-                        : 'https://ik.imagekit.io/tc8jxffbcvf/default-movie-portrait_EmJUj9Tda5wa.jpg?tr=fo-auto,di-'
-                    }
-                    alt={title}
-                    loading="lazy"
-                    width={250}
-                  />
-                  <Container as="div" p={10}>
-                    <MovieName>{title}</MovieName>
-                    <RealeseDate>
-                      {new Date(releaseDate).getFullYear()}
-                    </RealeseDate>
-                  </Container>
-                </Link>
-              </MovieItem>
-            ))}
-          </MoviesList>
+          <MoviesList movies={searchMovies} location={location} />
         )}
       </section>
     </main>

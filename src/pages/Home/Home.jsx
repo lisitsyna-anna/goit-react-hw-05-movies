@@ -1,18 +1,11 @@
-import Container from 'components/Container';
-import RequestError from 'components/RequestError';
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-import { getTrendingMovies, IMAGE_URL } from 'services/moviesAPI';
+import RequestError from 'components/RequestError';
+import MoviesList from 'components/MoviesList/MoviesList';
+import { Title } from './Home.styled';
 
-import {
-  Title,
-  MoviesList,
-  MovieItem,
-  MovieName,
-  RealeseDate,
-  MovieImg,
-} from './Home.styled';
+import { getTrendingMovies } from 'services/moviesAPI';
 
 const Home = () => {
   const [trendingMovies, setTrendingMovies] = useState([]);
@@ -37,32 +30,7 @@ const Home = () => {
       <Title>Trending today</Title>
       {error && <RequestError />}
       {trendingMovies?.length > 0 && (
-        <MoviesList>
-          {trendingMovies.map(({ id, title, posterPath, releaseDate }) => (
-            <MovieItem key={id}>
-              <Link to={`/movies/${id}`} state={{ from: location }}>
-                <MovieImg
-                  src={
-                    posterPath
-                      ? IMAGE_URL + posterPath
-                      : 'https://ik.imagekit.io/tc8jxffbcvf/default-movie-portrait_EmJUj9Tda5wa.jpg?tr=fo-auto,di-'
-                  }
-                  alt={title}
-                  loading="lazy"
-                  width={250}
-                />
-                <Container as="div" p={10}>
-                  <MovieName>
-                    {title ? title : 'There is no title here yet. '}
-                  </MovieName>
-                  <RealeseDate>
-                    {releaseDate ? new Date(releaseDate).getFullYear() : '---'}
-                  </RealeseDate>
-                </Container>
-              </Link>
-            </MovieItem>
-          ))}
-        </MoviesList>
+        <MoviesList movies={trendingMovies} location={location} />
       )}
     </main>
   );
